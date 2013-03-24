@@ -144,6 +144,7 @@ RTC::ReturnCode_t DirectInput::onActivated(RTC::UniqueId ec_id)
 
 	m_pDirectInputManager = new CDirectInput8Manager(g_hWnd);
 	
+	Sleep(1000);
 	return RTC::RTC_OK;
 }
 
@@ -160,9 +161,14 @@ RTC::ReturnCode_t DirectInput::onExecute(RTC::UniqueId ec_id)
 {
 	m_pDirectInputManager->UpdateInputState(/*g_hWnd*/);
 
+	
 	m_lP.data[0] = m_pDirectInputManager->lX;
 	m_lP.data[1] = m_pDirectInputManager->lY;
 	m_lP.data[2] = m_pDirectInputManager->lZ;
+	// For delay of initialization.
+	if(m_lP.data[0] > 1000 || m_lP.data[0] < -1000) {
+		return RTC::RTC_OK;
+	}
 	m_lPOut.write();
 
 	m_lR.data[0] = m_pDirectInputManager->lRx;

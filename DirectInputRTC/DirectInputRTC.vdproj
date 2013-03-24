@@ -133,6 +133,14 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+            }
         }
         "Release"
         {
@@ -149,6 +157,27 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.0,Profile=Client"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4 Client Profile (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.0,Profile=Client"
+                    }
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Windows.Installer.3.1"
+                    {
+                    "Name" = "8:Windows Installer 3.1"
+                    "ProductCode" = "8:Microsoft.Windows.Installer.3.1"
+                    }
+                }
+            }
         }
     }
     "Deployable"
@@ -570,6 +599,28 @@
             "Property" = "8:ProgramMenuFolder"
                 "Folders"
                 {
+                    "{9EF0B969-E518-4E46-987F-47570745A589}:_1D3E95F327A741B19B176FBEAF0CB19E"
+                    {
+                    "Name" = "8:ysuga_net"
+                    "AlwaysCreate" = "11:FALSE"
+                    "Condition" = "8:"
+                    "Transitive" = "11:FALSE"
+                    "Property" = "8:_8ECEFF69698849AF8580061DD4236281"
+                        "Folders"
+                        {
+                            "{9EF0B969-E518-4E46-987F-47570745A589}:_4A9FEE9E22AD43E58B67CECA252DB57E"
+                            {
+                            "Name" = "8:DirectInputRTC"
+                            "AlwaysCreate" = "11:FALSE"
+                            "Condition" = "8:"
+                            "Transitive" = "11:FALSE"
+                            "Property" = "8:_FAEF809E44CA4891AACA0CED894C22C9"
+                                "Folders"
+                                {
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -589,7 +640,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:DirectInputRTC"
         "ProductCode" = "8:{3AF8D288-75A2-4EC3-A882-CC05BF156F93}"
-        "PackageCode" = "8:{6853A704-14DC-4CEC-9759-5696656523BF}"
+        "PackageCode" = "8:{3DF093D2-46C1-4577-A6E3-FA659316C070}"
         "UpgradeCode" = "8:{BA6CC883-20F8-4D28-96EA-C524F232DB00}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -718,7 +769,7 @@
             "IconIndex" = "3:0"
             "Transitive" = "11:FALSE"
             "Target" = "8:_299B9D2C7AD94302BB0E5606038FAEC5"
-            "Folder" = "8:_E91D2F6429FA4EE3B8C4C39EAB905174"
+            "Folder" = "8:_4A9FEE9E22AD43E58B67CECA252DB57E"
             "WorkingFolder" = "8:_66F75E40103E4A1E973120AE59E0B835"
             "Icon" = "8:"
             "Feature" = "8:"
