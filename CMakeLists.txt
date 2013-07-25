@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 
 project(DirectInput)
-string(TOLOWER ${PROJECT_NAME} PROJECT_NAME_LOWER)
+# string(${PROJECT_NAME} PROJECT_NAME_LOWER)
 include("${PROJECT_SOURCE_DIR}/cmake/utils.cmake")
 set(PROJECT_VERSION 1.1 CACHE STRING "DirectInput version")
 DISSECT_VERSION()
@@ -34,9 +34,9 @@ endif(STATIC_LIBS)
 set(BIN_INSTALL_DIR "components/bin")
 set(LIB_INSTALL_DIR "components/lib")
 set(INC_INSTALL_DIR
-    "components/include/${PROJECT_NAME_LOWER}-${PROJECT_VERSION_MAJOR}")
+    "components/include/${PROJECT_NAME}-${PROJECT_VERSION_MAJOR}")
 set(SHARE_INSTALL_DIR
-    "components/share/${PROJECT_NAME_LOWER}-${PROJECT_VERSION_MAJOR}")
+    "components/share/${PROJECT_NAME}-${PROJECT_VERSION_MAJOR}")
 
 set(LIBDXSDK_DIR $ENV{DXSDK_DIR})
 set(LIBDXSDK_INC_DIR ${LIBDXSDK_DIR}/include)
@@ -80,8 +80,8 @@ endif(BUILD_SOURCES)
 
 # Package creation
 include(InstallRequiredSystemLibraries)
-set(PROJECT_EXECUTABLES ${PROJECT_NAME_LOWER}Comp
-    "${PROJECT_NAME_LOWER}Comp")
+set(PROJECT_EXECUTABLES ${PROJECT_NAME}Comp
+    "${PROJECT_NAME}Comp")
 set(cpack_options "${PROJECT_BINARY_DIR}/cpack_options.cmake")
 configure_file("${PROJECT_SOURCE_DIR}/cmake/cpack_options.cmake.in"
     ${cpack_options} @ONLY)

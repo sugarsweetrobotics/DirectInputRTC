@@ -97,15 +97,48 @@ RTC::ReturnCode_t DirectInput::onInitialize()
 
   m_rgbButtons.data.length(8);
 
+
+
+	HWND g_hWnd;
+	HANDLE g_hInstance;
+#define BUFSIZE 1024
+	char OldWindowTitle[BUFSIZE];
+	char NewWindowTitle[BUFSIZE];
+
+	//	std::cout << "[RTC::DirectInput] Getting Console WndTitle" << std::endl;
+	::GetConsoleTitle(OldWindowTitle, BUFSIZE);
+	//	std::cout << "[RTC::DirectInput] Title = " << OldWindowTitle << std::endl;
+	wsprintf(NewWindowTitle, "ControllerComponent(%d/%d)",
+		GetTickCount(), GetCurrentProcessId());
+	//	::SetConsoleTitle(NewWindowTitle);
+
+	Sleep(40);
+
+	g_hWnd = FindWindow(NULL, OldWindowTitle);
+	if (g_hWnd == NULL) {
+	  std::cout << "[RTC::DirectInput] Failed To FindWindow." << std::endl;
+	  return RTC::RTC_ERROR;
+	}
+	//	::SetConsoleTitle(OldWindowTitle);
+	
+	g_hInstance = ::GetModuleHandle(NULL); //GetWindowLong(g_hWnd, GWL_HINSTANCE);
+
+	std::cout << "[RTC::DirectInput] Creating DirectInput8Manager" << std::endl;
+	m_pDirectInputManager = new CDirectInput8Manager(g_hWnd);
+	
+	//Sleep(1000);
+
+
   return RTC::RTC_OK;
 }
 
-/*
+
 RTC::ReturnCode_t DirectInput::onFinalize()
 {
+	delete m_pDirectInputManager;
   return RTC::RTC_OK;
 }
-*/
+
 
 /*
 RTC::ReturnCode_t DirectInput::onStartup(RTC::UniqueId ec_id)
@@ -124,34 +157,13 @@ RTC::ReturnCode_t DirectInput::onShutdown(RTC::UniqueId ec_id)
 
 RTC::ReturnCode_t DirectInput::onActivated(RTC::UniqueId ec_id)
 {
-	HWND g_hWnd;
-	HANDLE g_hInstance;
-#define BUFSIZE 1024
-	char OldWindowTitle[BUFSIZE];
-	char NewWindowTitle[BUFSIZE];
-
-	::GetConsoleTitle(OldWindowTitle, BUFSIZE);
-	wsprintf(NewWindowTitle, "ControllerComponent(%d/%d)",
-		GetTickCount(), GetCurrentProcessId());
-	::SetConsoleTitle(NewWindowTitle);
-
-	Sleep(40);
-
-	g_hWnd = FindWindow(NULL, NewWindowTitle);
-	::SetConsoleTitle(OldWindowTitle);
-	
-	g_hInstance = ::GetModuleHandle(NULL); //GetWindowLong(g_hWnd, GWL_HINSTANCE);
-
-	m_pDirectInputManager = new CDirectInput8Manager(g_hWnd);
-	
-	Sleep(1000);
 	return RTC::RTC_OK;
 }
 
 
 RTC::ReturnCode_t DirectInput::onDeactivated(RTC::UniqueId ec_id)
 {
-	delete m_pDirectInputManager;
+
 
   return RTC::RTC_OK;
 }
@@ -159,16 +171,20 @@ RTC::ReturnCode_t DirectInput::onDeactivated(RTC::UniqueId ec_id)
 
 RTC::ReturnCode_t DirectInput::onExecute(RTC::UniqueId ec_id)
 {
-	m_pDirectInputManager->UpdateInputState(/*g_hWnd*/);
+  if(FAILED(m_pDirectInputManager->UpdateInputState(/*g_hWnd*/))) {
+    std::cout << "[RTC::DirectInput] - Failed to Update Input State of DirectInput." << std::endl;
+    return RTC::RTC_ERROR;
+  }
 
 	
 	m_lP.data[0] = m_pDirectInputManager->lX;
 	m_lP.data[1] = m_pDirectInputManager->lY;
 	m_lP.data[2] = m_pDirectInputManager->lZ;
+	//std::cout << "[RTC::DirectInput] - Data[" << m_lP.data[0] << "," << m_lP.data[1] << "," << m_lP.data[2] << "]" << std::endl;
 	// For delay of initialization.
-	if(m_lP.data[0] > 1000 || m_lP.data[0] < -1000) {
-		return RTC::RTC_OK;
-	}
+	//if(m_lP.data[0] > 1000 || m_lP.data[0] < -1000) {
+	//		return RTC::RTC_OK;
+	//	}
 	m_lPOut.write();
 
 	m_lR.data[0] = m_pDirectInputManager->lRx;
@@ -237,9 +253,9 @@ RTC::ReturnCode_t DirectInput::onExecute(RTC::UniqueId ec_id)
 	}
 	m_rgbButtonsOut.write();
 
-	if(m_debug) {
+	if(m_debug == 1) {
 		static int i;
-		system("cls");
+		//system("cls");
 		printf("Counter = %10d\n", i++);
 		printf("lX          lY          lZ          lRx         lRy         lRz\n"); 
 		printf("%-+10d  "  "%-+10d  "  "%-+10d  "  "%-+10d  "  "%-+10d  "  "%-+10d\n" ,
@@ -250,7 +266,8 @@ RTC::ReturnCode_t DirectInput::onExecute(RTC::UniqueId ec_id)
 			m_pDirectInputManager->lRy,
 			m_pDirectInputManager->lRz
 			);
-
+	}
+	if(m_debug == 2) {
 		printf("rglSlider0  rglSlider1  hPov0       vPov0       hPov1       vPov1\n");
 		printf("%-+10d  "  "%-+10d  "  "%-+10d  "  "%-+10d  "  "%-+10d  "  "%-+10d\n", 
 			m_pDirectInputManager->rglSlider[0],

@@ -11,6 +11,8 @@
 
 #include <wbemidl.h>
 
+#include <iostream>
+
 
 BOOL CALLBACK    EnumObjectsCallback( const DIDEVICEOBJECTINSTANCE* pdidoi, VOID* pContext );
 BOOL CALLBACK    EnumJoysticksCallback( const DIDEVICEINSTANCE* pdidInstance, VOID* pContext );
@@ -20,12 +22,57 @@ BOOL CALLBACK    EnumJoysticksCallback( const DIDEVICEINSTANCE* pdidInstance, VO
 CDirectInput8Manager::CDirectInput8Manager(HWND hWnd) :
 m_pDI(NULL), m_pJoystick(NULL), m_bFilterOutXinputDevices(false), m_pXInputDeviceList(NULL)
 {
+  
+
+  WNDCLASSEX wcex;
+  wcex.cbSize = sizeof(WNDCLASSEX); 
+  wcex.style = CS_HREDRAW | CS_VREDRAW;
+  wcex.lpfnWndProc = DefWindowProc;
+  wcex.cbClsExtra = 0;
+  wcex.cbWndExtra = 0;
+  wcex.hInstance = GetModuleHandle(NULL);
+  wcex.hIcon = LoadIcon(NULL, IDI_APPLICATION);
+  wcex.hCursor = LoadCursor(NULL, IDC_ARROW);
+  wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
+  wcex.lpszMenuName = NULL;
+  wcex.lpszClassName = "DirectInput8Manager";
+  wcex.hIconSm = LoadIcon(NULL, IDI_APPLICATION);
+  
+  // ウインドウクラスを登録します。
+  RegisterClassEx(&wcex);
+  
+  // ウインドウを作成します。
+  hWnd = CreateWindow(wcex.lpszClassName, // ウインドウクラス名
+		      "DirectInput8Manager", // キャプション文字列
+		      WS_OVERLAPPEDWINDOW,	 // ウインドウのスタイル
+		      CW_USEDEFAULT,	 // 水平位置
+		      CW_USEDEFAULT,	 // 垂直位置
+		      CW_USEDEFAULT,	 // 幅
+		      CW_USEDEFAULT,	 // 高さ
+		      NULL,	 // 親ウインドウ
+		      NULL,	 // ウインドウメニュー
+		      GetModuleHandle(NULL),	 // インスタンスハンドル
+		      NULL);	 // WM_CREATE情報
+
+  // ウインドウを表示します。
+  //ShowWindow(hWnd, SW_SHOW);
+  UpdateWindow(hWnd);
+
+// メッセージループ
+  //while(GetMessage(&msg, NULL, 0, 0)) 
+  //{
+  //TranslateMessage(&msg);
+  //DispatchMessage(&msg);
+  //}
+
+
 	m_hWnd = hWnd;
 	HRESULT hres = InitDirectInput(hWnd);
 }
 
 CDirectInput8Manager::~CDirectInput8Manager(void)
 {
+	//ShowWindow(m_hWnd, SW_HIDE);
 	FreeDirectInput();
 }
 
@@ -88,6 +135,7 @@ HRESULT CDirectInput8Manager::InitDirectInput( HWND hDlg )
 
     // Set the cooperative level to let DInput know how this device should
     // interact with the system and with other DInput applications.
+    std::cout << "Background Access!" << std::endl;
     if( FAILED( hr = m_pJoystick->SetCooperativeLevel( hDlg, DISCL_EXCLUSIVE | 
                                                              DISCL_BACKGROUND ) ) )
         return hr;
@@ -428,12 +476,20 @@ bool CDirectInput8Manager::IsXInputDevice( const GUID* pGuidProductFromDirectInp
 //-----------------------------------------------------------------------------
 HRESULT CDirectInput8Manager::UpdateInputState( /* hDlg */ )
 {
+	//MSG msg;
+	//if (GetMessage (&msg,NULL,0,0)) { /* メッセージループ */
+	//
+	//	TranslateMessage(&msg);
+	//	DispatchMessage(&msg);
+
+//	}
+
     HRESULT     hr;
     TCHAR       strText[512] = {0}; // Device state text
  //   DIJOYSTATE2 js;           // DInput Joystick state 
 
     if( NULL == m_pJoystick ) 
-        return S_OK;
+        return E_FAIL;
 
     // Poll the device to read the current state
     hr = m_pJoystick->Poll(); 
@@ -450,7 +506,12 @@ HRESULT CDirectInput8Manager::UpdateInputState( /* hDlg */ )
         // hr may be DIERR_OTHERAPPHASPRIO or other errors.  This
         // may occur when the app is minimized or in the process of 
         // switching, so just try again later 
-        return S_OK; 
+	if (hr == DIERR_OTHERAPPHASPRIO) {
+	  std::cout << "[DirectInput8Manager] Failed: DIERR_OTHERAPPHASPRIO" << std::endl;
+	} else {
+	  std::cout << "[DirectInput8Manager] Failed:" << std::hex << std::showbase << (long long)hr << std::endl;
+	}
+        return S_OK;
     }
 
     // Get the input's device state

@@ -3,7 +3,7 @@
     <rtc:BasicInfo xsi:type="rtcExt:basic_info_ext" rtcExt:saveProject="DirectInputRTC" rtc:updateDate="2009-12-11T16:41:40+09:00" rtc:creationDate="2009-12-11T16:41:40+09:00" rtc:version="1.1" rtc:vendor="ysuga_net" rtc:maxInstances="1" rtc:executionType="PeriodicExecutionContext" rtc:executionRate="100.0" rtc:description="DirectInput Component" rtc:category="Experimental" rtc:componentKind="DataFlowComponent" rtc:activityType="PERIODIC" rtc:componentType="STATIC" rtc:name="DirectInput"/>
     <rtc:Actions>
         <rtc:OnInitialize xsi:type="rtcDoc:action_status_doc" rtc:implemented="true"/>
-        <rtc:OnFinalize xsi:type="rtcDoc:action_status_doc" rtc:implemented="false"/>
+        <rtc:OnFinalize xsi:type="rtcDoc:action_status_doc" rtc:implemented="true"/>
         <rtc:OnStartup xsi:type="rtcDoc:action_status_doc" rtc:implemented="false"/>
         <rtc:OnShutdown xsi:type="rtcDoc:action_status_doc" rtc:implemented="false"/>
         <rtc:OnActivated xsi:type="rtcDoc:action_status_doc" rtc:implemented="true"/>

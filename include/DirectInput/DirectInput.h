@@ -82,7 +82,7 @@ class DirectInput
    * 
    * 
    */
-  // virtual RTC::ReturnCode_t onFinalize();
+  virtual RTC::ReturnCode_t onFinalize();
 
   /***
    *
@@ -298,7 +298,7 @@ class DirectInput
   
   // </rtc-template>
 
-	 CDirectInput8Manager* m_pDirectInputManager;
+  CDirectInput8Manager* m_pDirectInputManager;
 
 };
 
